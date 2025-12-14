@@ -36,7 +36,7 @@
     "core-js": "^3.6.5",
     "dexie": "^3.2.7",
     "dot-prop": "^5.2.0",
-    "electron-updater": "4.2.5",
+    "electron-updater": "4.6.5",
     "elliptic": "^6.5.4",
     "fflate": "^0.8.2",
     "floating-vue": "5.2.2",
