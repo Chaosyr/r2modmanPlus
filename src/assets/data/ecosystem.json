@@ -7851,6 +7851,10 @@
           "identifier": "1092790"
         },
         {
+              "platform": "xbox-game-pass",
+              "identifier": "DevolverDigital.Inscryption"
+        },
+        {
           "platform": "other",
           "identifier": null
         }
@@ -7866,7 +7870,13 @@
           "distributions": [
             {
               "platform": "steam",
-              "identifier": "1092790"
+              "identifier": "1092790",
+              "architecture": "x86"
+            },
+            {
+              "platform": "xbox-game-pass",
+              "identifier": "DevolverDigital.Inscryption",
+              "architecture": "x64"
             },
             {
               "platform": "other",

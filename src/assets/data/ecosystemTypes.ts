@@ -45,6 +45,7 @@ export interface Game {
 export interface Distribution {
     identifier?: any;
     platform:    Platform;
+    architecture?: "x86" | "x64";
 }
 
 export enum Platform {
@@ -334,6 +335,7 @@ const typeMap: any = {
     "Distribution": o([
         { json: "identifier", js: "identifier", typ: u(undefined, "any") },
         { json: "platform", js: "platform", typ: r("Platform") },
+        { json: "architecture", js: "architecture", typ: u(undefined, "x86", "x64") },
     ], false),
     "Meta": o([
         { json: "displayName", js: "displayName", typ: "" },

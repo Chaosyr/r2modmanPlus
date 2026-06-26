@@ -33,7 +33,7 @@ export default class GameManager {
             game.packageIndex,
             identifier,
             game.distributions.map(
-                (x) => new StorePlatformMetadata(x.platform, x.identifier || undefined)
+                (x) => new StorePlatformMetadata(x.platform, x.identifier, x.architecture || undefined)
             ),
             game.meta.iconUrl ?? "",
             game.gameSelectionDisplayMode,
