@@ -1,3 +1,85 @@
+### 3.2.18
+
+#### Performance Improvements
+
+- There have been significant performance improvements to memory usage. Idle memory usage results in ~400 MB total on Lethal Company for example.
+- Additionally CPU cycles have been reduced, resulting in faster completion of tasks and a lower power usage.
+
+#### Visual Tweaks
+
+- "New" row added to Game Selection
+- "Hero" elements (title blocks), are no longer fixed to the top of the screen.
+- "Start modded" action no longer changes size when going to the Online section.
+
+#### Games Added
+
+- Bloons TD 6
+- Blue Prince
+- Book of Travels
+- Burglin' Gnomes
+- Everything is Crab
+- Goblin Cleanup
+- GRIME
+- Lucky Shot
+- MECCHA CHAMELEON
+- Paralives
+- Pikuniku
+- Romestead
+
+### 3.2.17
+
+#### Automatic Game Additions
+
+For the longest time you have needed to update the manager in order to get new games, and each game addition required me
+to create a release.
+
+It's automatic now. You'll be able to access any **supported** games given your mod manager version.
+
+
+### 3.2.16
+
+#### UI Changes
+
+- The "Game Selection" screen has been re-styled to:
+  - Add a favourites group
+  - Make game names easier to find and read
+  - Make the favourite action always visible
+  - Allow games to still be accessible if made hidden at any point in the future
+-
+
+#### Fixes
+
+- Titanfall 2 / Northstar can be launched from the manager again (thanks to @TB516)
+- Various style alignment issues fixed
+- Beetleball no longer recommends a fixed version of MelonLoader
+- Essential mod loader files are now synced on mod installs rather than on "Start modded" (thanks to @NikkelM)
+- Scrap Mechanic launch fixes (thanks to @BenMcAvoy)
+
+#### Games added
+
+- Sledding game
+- Hot Lava
+- Angry Birds VR: Isle of Pigs
+- Project Gorgon
+- Puttler
+- Island Market Simulator
+- SIDE EFFECTS
+- Modulus: Factory Automation
+- Roadside Research
+- MINOS
+- BRUTALISTICK VR
+- Super Psycho Baseball
+- Getting Over It
+- The Spell Brigade
+- Vampire Crawlers
+- Voodoo Fishin
+- Project Arrhythmia renamed to Afterbeat
+- Cave Crawlers
+- Gamble with your Friends
+- Miside Zero
+- Lootun
+- Windrose
+
 ### 3.2.15
 
 #### UI Changes

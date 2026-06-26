@@ -454,6 +454,9 @@ code {
     }
     &--top {
         padding-top: 1rem;
+        &-none {
+            padding-top: 0;
+        }
     }
 }
 
@@ -524,4 +527,8 @@ code {
 
 .v-popper__popper {
     z-index: 100 !important;
+}
+
+.modal-background {
+    backdrop-filter: blur(5px);
 }

@@ -7,23 +7,27 @@ import ManifestV2 from '../../../model/ManifestV2';
 import VersionNumber from '../../../model/VersionNumber';
 import { LogSeverity } from '../../../providers/ror2/logging/LoggerProvider';
 import Dependants from '../../../r2mm/mods/Dependants';
+import { useModIcon } from '../../composables/ModIconComposable';
 import { valueToReadableDate } from '../../../utils/DateUtils';
 import { splitToNameAndVersion } from '../../../utils/DependencyUtils';
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, ref } from 'vue';
 import { getStore } from '../../../providers/generic/store/StoreProvider';
 import { State } from '../../../store';
+import { UnsatisfiedDependencies } from '../../../store/modules/ProfileModule';
+import ThunderstoreMod from "../../../model/ThunderstoreMod";
+import ThunderstoreVersion from "../../../model/ThunderstoreVersion";
 
 const store = getStore<State>();
 
 type LocalModCardProps = {
     mod: ManifestV2;
+    version?: ThunderstoreVersion;
 }
 
 const props = defineProps<LocalModCardProps>();
 
-const disabledDependencies = ref<ManifestV2[]>([]);
-const missingDependencies = ref<string[]>([]);
 const disableChangePending = ref<boolean>(false);
+const icon = useModIcon(() => props.mod);
 
 // Mod loader packages can't be disabled as it's hard to define
 // what that should even do in all cases.
@@ -32,36 +36,13 @@ const canBeDisabled = computed(() => !store.getters['isModLoader'](props.mod.get
 const isDeprecated = computed(() => store.state.tsMods.deprecated.get(props.mod.getName()) || false);
 const isLatestVersion = computed(() => store.getters['tsMods/isLatestVersion'](props.mod));
 const localModList = computed(() => store.state.profile.modList);
-const tsMod = computed(() => store.getters['tsMods/tsMod'](props.mod));
+const tsMod = computed<ThunderstoreMod>(() => store.getters['tsMods/tsMod'](props.mod));
 
-async function updateDependencies() {
-    if (props.mod.getDependencies().length === 0) {
-        return;
-    }
-
-    const dependencies = props.mod.getDependencies();
-    const dependencyNames = dependencies.map(dependencyStringToModName);
-    const foundDependencies: ManifestV2[] = [];
-
-    for (const mod of localModList.value) {
-        if (foundDependencies.length === dependencyNames.length) {
-            break;
-        }
-
-        if (dependencyNames.includes(mod.getName())) {
-            foundDependencies.push(mod);
-        }
-    }
-
-    const foundNames = foundDependencies.map((mod) => mod.getName());
-
-    disabledDependencies.value = foundDependencies.filter((d) => !d.isEnabled());
-    missingDependencies.value = dependencies.filter(
-        (d) => !foundNames.includes(dependencyStringToModName(d))
-    );
-}
-
-watch(localModList, updateDependencies);
+const unsatisfiedDependencies = computed<UnsatisfiedDependencies | undefined>(() =>
+    store.getters['profile/unsatisfiedDependencies'].get(props.mod.getName())
+);
+const disabledDependencies = computed<ManifestV2[]>(() => unsatisfiedDependencies.value?.disabledDependencies ?? []);
+const missingDependencies = computed<string[]>(() => unsatisfiedDependencies.value?.missingDependencies ?? []);
 
 async function disableMod() {
     if (disableChangePending.value) {
@@ -167,17 +148,9 @@ function viewAssociatedMods() {
     store.commit('openAssociatedModsModal', props.mod);
 }
 
-onMounted(() => {
-    updateDependencies();
-})
-
 // Need to wrap util call in method to allow access from Vue context
 function getReadableDate(value: number): string {
     return valueToReadableDate(value);
-}
-
-function dependencyStringToModName(x: string) {
-    return x.substring(0, x.lastIndexOf('-'));
 }
 </script>
 
@@ -186,7 +159,7 @@ function dependencyStringToModName(x: string) {
         :description="mod.getDescription()"
         :enabled="mod.isEnabled()"
         :id="`${mod.getAuthorName()}-${mod.getName()}-${mod.getVersionNumber()}`"
-        :image="mod.getIcon()"
+        :image="icon"
         :allowSorting="true">
 
         <template v-slot:title>
@@ -217,6 +190,8 @@ function dependencyStringToModName(x: string) {
 
         <template v-slot:description>
             <p class='card-timestamp' v-if="mod.getInstalledAtTime() !== 0"><strong>Installed on:</strong> {{ getReadableDate(mod.getInstalledAtTime()) }}</p>
+            <p class='card-timestamp' v-if="version && version.getDateCreated()"><strong>Released on:</strong>
+                {{ getReadableDate(version!.getDateCreated()!.getTime()) }}</p>
         </template>
 
         <!-- Show icon button row even when card is collapsed -->

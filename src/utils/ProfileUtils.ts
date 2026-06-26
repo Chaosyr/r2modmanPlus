@@ -14,6 +14,7 @@ import ZipProvider from "../providers/generic/zip/ZipProvider";
 import ProfileInstallerProvider from "../providers/ror2/installing/ProfileInstallerProvider";
 import * as PackageDb from '../r2mm/manager/PackageDexieStore';
 import ProfileModList from "../r2mm/mods/ProfileModList";
+import { wasDownloadedFromOnline } from './DownloadUtils';
 
 export async function exportModsToCombos(
     exportMods: ExportMod[],
@@ -97,6 +98,11 @@ export async function installModsToProfile(
 
             const manifestMod = new ManifestV2().fromThunderstoreCombo(comboMod);
 
+            // Mark as downloaded from online if the state file exists in cache
+            if (await wasDownloadedFromOnline(comboMod)) {
+                manifestMod.setOnlineSource(true);
+            }
+
             if (installedVersions.includes(manifestMod.getDependencyString())) {
                 continue;
             }
@@ -122,7 +128,6 @@ export async function installModsToProfile(
             }
 
             manifestMod.setInstalledAtTime(Number(new Date()));
-            ProfileModList.setIconPath(manifestMod, profile);
 
             if (typeof progressCallback === "function") {
                 const progress = Math.floor(((index + 1) / comboList.length) * 100);
